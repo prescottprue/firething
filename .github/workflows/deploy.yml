@@ -7,8 +7,8 @@ on:
       - prod
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -57,14 +57,15 @@ jobs:
 
           # Find the config associated to the firebase project in .firebaserc (falling back to default)
           gcloudProject=$(cat .firebaserc | jq -r --arg alias "$projectAlias" '.projects[$alias] // .projects.default')
+          appName=firething
 
-          echo Setting configuration from the \"$gcloudProject\" Firebase project...
+          echo Setting configuration from the \"$gcloudProject\" Firebase Project and \"$appName\" App...
 
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
 
           # Use firebase SDK API to get the app's configuration and export to CYPRESS. NOTE: databaseURL is intentionally removed
           firebaseConfig=$(npx firebase --project $GCLOUD_PROJECT apps:sdkconfig WEB \
-            $(npx firebase --project $GCLOUD_PROJECT apps:list WEB | grep $FIREBASE_APP_NAME | awk '{ print $4}') | \
+            $(npx firebase --project $GCLOUD_PROJECT apps:list WEB | grep $appName | awk '{ print $4}') | \
               tr '\n' ' ' | \
               sed 's/.*initializeApp(//g' | \
               sed 's/);//g' | \
