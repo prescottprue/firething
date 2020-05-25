@@ -1,0 +1,111 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+      - prod
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 10
+
+      - name: Get Library Versions For Binary Caching
+        id: cache-settings
+        run: |
+          echo "::set-output name=dir::$(yarn cache dir)"
+          echo "::set-output name=firebase-tools::$(yarn list -s --depth=0 --pattern firebase-tools | tail -n 1 | sed 's/.*@//g')"
+
+      - name: Cache Firebase Emulator Binaries
+        uses: actions/cache@v1
+        with:
+          path: ~/.cache/firebase/emulators
+          key: ${{ runner.os }}-firebase-${{ steps.cache-settings.outputs.firebase-tools }}
+
+      - name: Cache App Dependencies
+        uses: actions/cache@v1
+        with:
+          path: ${{ steps.cache-settings.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+
+      - name: Install Dependencies
+        env:
+          CI: 1
+          CYPRESS_INSTALL_BINARY: 0 # Skip install of Cypress (handled in its own job)
+          HUSKY_SKIP_INSTALL: 1 # Skip install of Husky
+        run: |
+          yarn install --frozen-lockfile
+          yarn --cwd functions install --frozen-lockfile
+
+      - name: Verify App
+        run: |
+          yarn build:config # Create env specific src/config.js
+          yarn lint # Check for lint in app code
+          yarn build # Build app bundles
+
+      - name: Verify Functions
+        run: |
+          yarn --cwd functions test:cov # Run unit tests with coverage
+          yarn --cwd functions build
+
+      # Archive build in case it needs to be downloaded later for debugging
+      - name: Archive Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build
+
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_HEAD_REF: ${{ github.head_ref }}
+        # Deploy to project associated with branch name alias in .firebaserc.
+        # Force flag is used to automatically delete any removed cloud functions
+        run: |
+          $(yarn bin)/firebase-ci deploy -s --force
+          echo "::set-env name=PACKAGE_VERSION::$(cat package.json | jq -r '.version')"
+
+      # TODO: Uncomment after setting SENTRY_AUTH_TOKEN secret and confirming org and project name
+      # - name: Upload SourceMaps to Sentry
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: prescottprue
+      #     SENTRY_PROJECT: firething
+      #   run: |
+      #     gitBranch=${GITHUB_REF##*/}
+      #     envName=$(if [ $gitBranch == "master" ]; then echo staging; else echo $gitBranch; fi;)
+      #     releaseSuffix=$envName@$PACKAGE_VERSION
+      #     releaseName=firething-$releaseSuffix
+      #     echo Creating Sentry release \"$releaseName\" for project \"$SENTRY_PROJECT\"...
+      #     $(yarn bin)/sentry-cli releases new $releaseName --finalize
+      #     echo Uploading source maps to Sentry release...
+      #     $(yarn bin)/sentry-cli releases files $releaseName upload-sourcemaps ./build/static/js --no-rewrite
+      #     echo Associating commits with the Sentry release...
+      #     $(yarn bin)/sentry-cli releases set-commits --auto $version
+
+      - name: Check if version has been updated
+        if: github.ref == 'refs/heads/prod'
+        id: check
+        uses: EndBug/version-check@v1
+
+      - name: Create Release
+        if: github.ref == 'refs/heads/prod' && steps.check.outputs.changed == 'true'
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: v${{ env.PACKAGE_VERSION }}
+          release_name: v${{ env.PACKAGE_VERSION }}
+          draft: false
+          prerelease: false

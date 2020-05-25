@@ -1,0 +1,28 @@
+{
+  "generator-react-firebase": {
+    "promptValues": {
+      "githubUser": "prescottprue",
+      "includeRedux": false,
+      "includeFirestore": true,
+      "otherFeatures": [
+        "Continuous Integration config",
+        "Firebase Cloud Messaging",
+        "Firebase Functions (with ESNext support)",
+        "Tests for Firebase Functions (Mocha/Chai or Jest)",
+        "Tests for React Components (Jest)",
+        "Tests for UI (Cypress)",
+        "Firebase Analytics",
+        "Error Tracking (Sentry.io)",
+        "Client Side Error Reporting (Stackdriver)"
+      ],
+      "functionsTestTool": "jest",
+      "firebaseKey": "AIzaSyDE5pl5l614H9i0OD-4JRFzuErlBBON_AI",
+      "firebaseProjectId": "firething-347ed",
+      "messagingSenderId": "490492091019",
+      "appId": "1:490492091019:web:216845bd0cba1c808a928e",
+      "measurementId": "",
+      "firebasePublicVapidKey": "BG5uwFfvatV1RFUKEnbuGs9by5qY6hmDd8GBE6Za9kqeGGRbvnyUuEgze-pX6IUWNlfMioY0JGY4G8ANWucgpYc",
+      "ciProvider": "githubActions"
+    }
+  }
+}
