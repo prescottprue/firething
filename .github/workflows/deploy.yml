@@ -64,8 +64,8 @@ jobs:
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
 
           # Use firebase SDK API to get the app's configuration and export to CYPRESS. NOTE: databaseURL is intentionally removed
-          firebaseConfig=$(npx firebase --project $GCLOUD_PROJECT apps:sdkconfig WEB \
-            $(npx firebase --project $GCLOUD_PROJECT apps:list WEB | grep $appName | awk '{ print $4}') | \
+          firebaseConfig=$(npx firebase --project $gcloudProject apps:sdkconfig WEB \
+            $(npx firebase --project $gcloudProject apps:list WEB | grep $appName | awk '{ print $4}') | \
               tr '\n' ' ' | \
               sed 's/.*initializeApp(//g' | \
               sed 's/);//g' | \
