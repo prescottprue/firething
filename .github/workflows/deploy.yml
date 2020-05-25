@@ -54,9 +54,9 @@ jobs:
           set -o pipefail
 
           # Throw a clear error if FIREBASE_TOKEN is not set
-          if [ ! -z "$FIREBASE_TOKEN" ];
+          if [ -z "$FIREBASE_TOKEN" ];
             then
-              echo "FIREBASE_TOKEN environment variable is required to load project configs"
+              echo "FIREBASE_TOKEN environment variable is required to load project configuration"
               exit 1
           fi
 
