@@ -99,8 +99,8 @@ jobs:
 
       - name: Verify Functions
         run: |
-          yarn --cwd functions test:cov # Run unit tests with coverage
-          yarn --cwd functions build
+          yarn functions:test:cov # Run unit tests with coverage
+          yarn functions:build
 
       - name: Upload Test Coverage For Functions
         run: |
