@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useAnalytics, useUser } from 'reactfire'
 import { useLocation } from 'react-router-dom'
+import { setErrorUser } from 'utils/errorHandler'
 import { version } from '../../../package.json'
 
 function SetupAnalytics() {
@@ -24,6 +25,7 @@ function SetupAnalytics() {
         avatar: user.photoURL,
         version
       })
+      setErrorUser(user)
     }
   }, [user?.uid]) // eslint-disable-line react-hooks/exhaustive-deps
 

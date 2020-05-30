@@ -49,15 +49,15 @@ jobs:
         run: |
           set -o pipefail
 
-          # Throw a clear error if FIREBASE_TOKEN is not set
+          # Throw a clear error if FIREBASE_TOKEN secret is not set
           if [ -z "$FIREBASE_TOKEN" ];
             then
-              errMsg="Error: \"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set"
-              echo $errMsg
+              errMsg="\"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
               echo "::error ::$errMsg"
               exit 1
           fi
 
+          # Get branch name from github ref (i.e. refs/heads/master -> master)
           gitBranch=${GITHUB_REF##*/}
 
           # Find the config associated to the firebase project in .firebaserc (falling back to default)
