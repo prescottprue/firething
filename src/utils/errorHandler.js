@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/browser'
+import StackdriverErrorReporter from 'stackdriver-errors-js'
 import { version } from '../../package.json'
 
 let errorHandler // eslint-disable-line import/no-mutable-exports
@@ -10,9 +11,9 @@ function initStackdriverErrorReporter() {
   try {
     const errorHandler = new StackdriverErrorReporter()
     errorHandler.start({
-      key: firebase.apiKey,
-      projectId: firebase.projectId,
-      service: 'fireadmin-site',
+      key: process.env.REACT_APP_FIREBASE_apiKey,
+      projectId: process.env.REACT_APP_FIREBASE_projectId,
+      service: 'firething-site',
       version
     })
   } catch (err) {
