@@ -13,7 +13,8 @@ global.functionsTest = functionsTestSetup({
 
 global.projectId = projectId
 
-// Initialize admin SDK with emulator settings for RTDB
+// Initialize admin SDK with emulator settings for RTDB (needed to
+// prevent error from initializeApp not being called since it is in index.js)
 admin.initializeApp({
   projectId,
   databaseURL: `http://${FIREBASE_DATABASE_EMULATOR_HOST}?ns=${projectId}`,
