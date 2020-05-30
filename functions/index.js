@@ -24,7 +24,7 @@ if (process.env.NODE_ENV !== 'test') {
 // Load all folders within dist directory (mirrors layout of src)
 const files = glob.sync('./dist/**/index.js', {
   cwd: __dirname,
-  ignore: ['./node_modules/**', './utils/**', './constants/**']
+  ignore: ['./node_modules/**', './dist/utils/**', './dist/constants/**']
 })
 
 // Loop over all folders found within dist loading only the relevant function
