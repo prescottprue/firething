@@ -67,7 +67,7 @@ jobs:
           gitBranch=${GITHUB_REF##*/}
 
           # Find the config associated to the firebase project in .firebaserc (falling back to default)
-          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$projectAlias" '.projects[$alias] // .projects.default')
+          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$gitBranch" '.projects[$alias] // .projects.default')
           appName=firething
           echo "Setting environment for branch: $gitBranch, project: $gcloudProject, and app: $appName..."
 
@@ -75,7 +75,7 @@ jobs:
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
 
           # Get value of Service Account associated with branch (i.e. STAGE_SERVICE_ACCOUNT)
-          branchPrefix=$(echo $projectAlias | tr a-z A-Z | tr - _)
+          branchPrefix=$(echo $gitBranch | tr a-z A-Z | tr - _)
           branchSaKey="${branchPrefix}_SERVICE_ACCOUNT"
           branchSa=$(eval echo \$${branchSaKey})
           if [[ ! -z "${branchSa}" ]]; then

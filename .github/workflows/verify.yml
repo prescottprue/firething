@@ -179,7 +179,7 @@ jobs:
           set -o pipefail
 
           gitBranch=${GITHUB_REF##*/}
-          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$projectAlias" '.projects[$alias] // .projects.default')
+          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$gitBranch" '.projects[$alias] // .projects.default')
           echo "Setting environment for branch: $gitBranch and project: $gcloudProject"
   
           echo "Setting emulator settings to environment..."
