@@ -75,6 +75,7 @@ jobs:
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
 
           # Get value of Service Account associated with branch (i.e. STAGE_SERVICE_ACCOUNT)
+          branchPrefix=$(echo $projectAlias | tr a-z A-Z | tr - _)
           branchSaKey="${branchPrefix}_SERVICE_ACCOUNT"
           branchSa=$(eval echo \$${branchSaKey})
           if [[ ! -z "${branchSa}" ]]; then
