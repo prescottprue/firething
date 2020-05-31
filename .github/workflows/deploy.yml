@@ -35,7 +35,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.cache-settings.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-app-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         env:
@@ -110,19 +110,24 @@ jobs:
             eval $line
           done <<< "$firebaseConfig"
 
-      - name: Verify Functions
-        run: |
-          yarn functions:test:cov --project $GCLOUD_PROJECT # Run unit tests with coverage
-          yarn functions:build
-
-      - name: Upload Test Coverage For Functions
-        # NOTE: Token will need to be added if using codecov with private repos
-        run: |
-          bash <(curl -s https://codecov.io/bash) -f functions/coverage/lcov.info || echo 'Codecov failed to upload'
-
       - name: Verify App
         run: |
           yarn lint # Check for lint in app code
+
+      # NOTE: Skipped because of "Channel credentials must be a ChannelCredentials object" error from firebase-admin
+      # See https://github.com/firebase/firebase-tools/issues/2207 for more info
+      # - name: Unit Test Functions
+      #   run: |
+      #     yarn functions:test:cov -- --project $GCLOUD_PROJECT # Run unit tests with coverage
+
+      # - name: Upload Test Coverage For Functions
+      #   # NOTE: Token will need to be added if using codecov with private repos
+      #   run: |
+      #     bash <(curl -s https://codecov.io/bash) -f functions/coverage/lcov.info || echo 'Codecov failed to upload'
+
+      - name: Build Functions
+        run: |
+          yarn functions:build
 
       - name: Build App
         run: |

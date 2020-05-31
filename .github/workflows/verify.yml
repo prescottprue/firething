@@ -31,7 +31,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ${{ steps.cache-settings.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-app-${{ hashFiles('yarn.lock') }}
 
       - name: Install Dependencies
         env:
@@ -53,8 +53,16 @@ jobs:
           # Throw a clear error if FIREBASE_TOKEN secret is not set
           if [ -z "$FIREBASE_TOKEN" ];
             then
-              errMsg="\"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
-              echo "::error ::$errMsg"
+              missingTokenErrMsg="\"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
+              echo "::error ::$missingTokenErrMsg"
+              exit 1
+          fi
+
+          # Throw a clear error if MASTER_SERVICE_ACCOUNT secret is not set
+          if [ -z "$SERVICE_ACCOUNT" ];
+            then
+              missingSaErrMsg="\"MASTER_SERVICE_ACCOUNT\" github secret is required to run functions unit tests. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
+              echo "::error ::$missingSaErrMsg"
               exit 1
           fi
 
@@ -62,7 +70,7 @@ jobs:
           gitBranch=${GITHUB_REF##*/}
 
           # Find the config associated to the firebase project in .firebaserc (falling back to default)
-          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$projectAlias" '.projects[$alias] // .projects.default')
+          gcloudProject=$(cat .firebaserc | jq -r --arg alias "$gitBranch" '.projects[$alias] // .projects.default')
           appName=firething
           echo "Setting environment for branch: $gitBranch, project: $gcloudProject, and app: $appName..."
 
@@ -100,24 +108,29 @@ jobs:
             eval $line
           done <<< "$firebaseConfig"
 
-      - name: Verify Functions
-        run: |
-          yarn functions:test:cov --project $GCLOUD_PROJECT # Run unit tests with coverage
-          yarn functions:build
-
-      - name: Upload Test Coverage For Functions
-        # NOTE: Token will need to be added if using codecov with private repos
-        run: |
-          bash <(curl -s https://codecov.io/bash) -f functions/coverage/lcov.info || echo 'Codecov failed to upload'
-
       - name: Verify App
         run: |
           yarn lint # Check for lint in app code
 
+      # NOTE: Skipped because of "Channel credentials must be a ChannelCredentials object" error from firebase-admin
+      # See https://github.com/firebase/firebase-tools/issues/2207 for more info
+      # - name: Unit Test Functions
+      #   run: |
+      #     yarn functions:test:cov -- --project $GCLOUD_PROJECT # Run unit tests with coverage
+
+      # - name: Upload Test Coverage For Functions
+      #   # NOTE: Token will need to be added if using codecov with private repos
+      #   run: |
+      #     bash <(curl -s https://codecov.io/bash) -f functions/coverage/lcov.info || echo 'Codecov failed to upload'
+
+      - name: Build Functions
+        run: |
+          yarn functions:build
+
       - name: Build App
         run: |
           yarn build
-  
+
       - name: Archive Build Artifact
         uses: actions/upload-artifact@v2
         with:
