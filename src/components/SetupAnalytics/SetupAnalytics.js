@@ -17,7 +17,7 @@ function SetupAnalytics() {
   // By passing `user.uid` to the second argument of `useEffect`,
   // we only set user id when it exists
   useEffect(() => {
-    if (user?.uid) {
+    if (user.uid) {
       analytics.setUserId(user.uid)
       analytics.setUserProperties({
         name: user.displayName,
