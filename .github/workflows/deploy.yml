@@ -47,6 +47,8 @@ jobs:
 
       - name: Set App Environment Settings
         env:
+          MASTER_SERVICE_ACCOUNT: ${{ secrets.MASTER_SERVICE_ACCOUNT }}
+          PROD_SERVICE_ACCOUNT: ${{ secrets.PROD_SERVICE_ACCOUNT }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
           GITHUB_REF: ${{ github.ref }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -72,10 +74,23 @@ jobs:
           # Set variables to environment to be used in later steps
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
 
+          # Get value of Service Account associated with branch (i.e. STAGE_SERVICE_ACCOUNT)
+          branchSaKey="${branchPrefix}_SERVICE_ACCOUNT"
+          branchSa=$(eval echo \$${branchSaKey})
+          if [[ ! -z "${branchSa}" ]]; then
+            echo Using service account with key \"$branchSaKey\"
+            serviceAccount=$branchSa
+          else
+            echo Falling back to service account with key "DEVELOP_SERVICE_ACCOUNT"
+            serviceAccount=$DEVELOP_SERVICE_ACCOUNT
+          fi
+
+          echo "Service Account selected for projectId $(echo $serviceAccount | jq .project_id)"
+
           # Generate Service Account file required to prevent credential error during functions unit tests (jq used to format)
           echo "Generating Service Account File..."
-          echo "$(echo $SERVICE_ACCOUNT | jq .)" > $HOME/serviceAccount.json
-          export GOOGLE_APPLICATION_CREDENTIALS="$HOME/serviceAccount.json"
+          echo "$(echo $serviceAccount | jq .)" > $HOME/serviceAccount.json
+          echo "::set-env name=GOOGLE_APPLICATION_CREDENTIALS::$HOME/serviceAccount.json"
 
           # Use Firebase SDK API to get the app's configuration and export to REACT_APP prefixed environment variables
           # NOTE: databaseURL is intentionally removed since it is set above

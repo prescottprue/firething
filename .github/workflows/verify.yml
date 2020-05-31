@@ -43,6 +43,7 @@ jobs:
 
       - name: Set App Environment Settings
         env:
+          SERVICE_ACCOUNT: ${{ secrets.MASTER_SERVICE_ACCOUNT }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
           GITHUB_REF: ${{ github.ref }}
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
@@ -78,7 +79,7 @@ jobs:
           # Generate Service Account file required to prevent credential error during functions unit tests (jq used to format)
           echo "Generating Service Account File..."
           echo "$(echo $SERVICE_ACCOUNT | jq .)" > $HOME/serviceAccount.json
-          export GOOGLE_APPLICATION_CREDENTIALS="$HOME/serviceAccount.json"
+          echo "::set-env name=GOOGLE_APPLICATION_CREDENTIALS::$HOME/serviceAccount.json"
 
           # Use Firebase SDK API to get the app's configuration and export to REACT_APP prefixed environment variables
           # NOTE: databaseURL is intentionally removed since it is set above
@@ -170,7 +171,7 @@ jobs:
 
       - name: Set Test Environment Settings
         env:
-          SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
+          SERVICE_ACCOUNT: ${{ secrets.MASTER_SERVICE_ACCOUNT }}
           FIREBASE_APP_NAME: ${{ secrets.FIREBASE_APP_NAME }}
           GITHUB_HEAD_REF: ${{ github.head_ref }}
           GITHUB_REF: ${{ github.ref }}
@@ -192,6 +193,7 @@ jobs:
           echo "::set-env name=CYPRESS_FB_databaseURL::http://$databaseEmulatorHost?ns=$gcloudProject"
           echo "::set-env name=GCLOUD_PROJECT::$gcloudProject"
   
+          # Generate Service Account file required to prevent credential error during functions unit tests (jq used to format)
           echo "Generating Service Account File..."
           echo "$(echo $SERVICE_ACCOUNT | jq .)" > $HOME/serviceAccount.json
           echo "::set-env name=GOOGLE_APPLICATION_CREDENTIALS::$HOME/serviceAccount.json"
