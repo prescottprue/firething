@@ -1,9 +1,7 @@
 # firething
 
-
 [![Build Status][build-status-image]][build-status-url]
 [![Code Coverage][coverage-image]][coverage-url]
-[![Code Climate][climate-image]][climate-url]
 [![License][license-image]][license-url]
 [![Code Style][code-style-image]][code-style-url]
 
@@ -34,44 +32,44 @@
     # Needed to skip warnings from jest@beta in package.json
     SKIP_PREFLIGHT_CHECK=true
 
-    FIREBASE_PROJECT_ID="firething-347ed"
-    FIREBASE_API_KEY="AIzaSyDE5pl5l614H9i0OD-4JRFzuErlBBON_AI"
+    FIREBASE_PROJECT_ID="<- projectId from Firebase Console ->"
+    FIREBASE_API_KEY="<- apiKey from Firebase Console ->"
 
     # App environment
-    REACT_APP_FIREBASE_API_KEY=$FIREBASE_API_KEY
-    REACT_APP_FIREBASE_AUTH_DOMAIN="firething-347ed.firebaseapp.com"
-    REACT_APP_FIREBASE_DATABASE_URL="https://firething-347ed.firebaseio.com"
-    REACT_APP_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
-    REACT_APP_FIREBASE_STORAGE_BUCKET="firething-347ed.appspot.com"
-    REACT_APP_FIREBASE_MESSAGING_SENDER_ID="490492091019"
-    REACT_APP_FIREBASE_APP_ID="1:490492091019:web:216845bd0cba1c808a928e"
-    REACT_APP_PUBLIC_VAPID_KEY="BG5uwFfvatV1RFUKEnbuGs9by5qY6hmDd8GBE6Za9kqeGGRbvnyUuEgze-pX6IUWNlfMioY0JGY4G8ANWucgpYc"
+    REACT_APP_FIREBASE_apiKey=$FIREBASE_API_KEY
+    REACT_APP_FIREBASE_authDomain="<- authdomain from Firebase Console ->"
+    REACT_APP_FIREBASE_databaseURL="<- databaseURL from Firebase Console ->"
+    REACT_APP_FIREBASE_projectId=$FIREBASE_PROJECT_ID
+    REACT_APP_FIREBASE_storageBucket="<- storageBucket from Firebase Console ->"
+    REACT_APP_FIREBASE_messagingSenderId="<- messagingSenderId from Firebase Console ->"
+    REACT_APP_FIREBASE_appId="<- appId from Firebase Console ->"
+    REACT_APP_PUBLIC_VAPID_KEY="<- public vapid key from messaging tab of Firebase Console ->"
     REACT_APP_SENTRY_DSN=""
 
     # Cypress Environment
-    CYPRESS_FIREBASE_PROJECT_ID=$FIREBASE_PROJECT_ID
-    CYPRESS_FIREBASE_API_KEY=$FIREBASE_API_KEY
+    CYPRESS_FIREBASE_projectId=$FIREBASE_PROJECT_ID
+    CYPRESS_FIREBASE_apiKey=$FIREBASE_API_KEY
    ```
 
 1. Start Development server: `yarn start`
 
 While developing, you will probably rely mostly on `yarn start`; however, there are additional scripts at your disposal:
 
-| `yarn <script>`    | Description                                                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------------------------------------------- |
-| `start`            | Serves your app at `localhost:3000` with automatic refreshing and hot module replacement                                |
-| `start:dist`       | Builds the application to `./dist` then serves at `localhost:3000` using firebase hosting emulator                      |
-| `start:emulate`    | Same as `start`, but pointed to database emulators (make sure to call `emulators` first to boot up emulators)           |
-| `build`            | Builds the application to `./dist`                                                                                      | 
-| `emulators`        | Starts database emulators for use with `start:emulate`                                                                  | 
-| `emulators:all`    | Starts database and hosting emulators (used in verify workflow by Cypress)                                              | 
-| `test`             | Runs unit tests with Jest. See [testing](#testing)                                                                      |
-| `test:watch`       | Runs `test` in watch mode to re-run tests when changed                                                                  | 
-| `test:ui:run`          | Runs ui tests with Cypress. See [testing](#testing)                                                                     |
-| `test:ui`     | Opens ui tests runner (Cypress Dashboard). See [testing](#testing)                                                      |
-| `test:ui:emulate`  | Same as `test:ui` but with tests pointed at emulators                                                              | 
-| `lint`             | [Lints](http://stackoverflow.com/questions/8503559/what-is-linting) the project for potential errors                    |
-| `lint:fix`         | Lints the project and [fixes all correctable errors](http://eslint.org/docs/user-guide/command-line-interface.html#fix) |
+| `yarn <script>`     | Description                                                                                                             |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `start`             | Serves your app at `localhost:3000` with automatic refreshing and hot module replacement                                |
+| `start:dist`        | Builds the application to `./build` then serves at `localhost:3000` using firebase hosting emulator                     |
+| `start:emulate`     | Same as `start`, but pointed to database emulators (make sure to call `emulators` first to boot up emulators)           |
+| `build`             | Builds the application to `./build`                                                                                     |
+| `emulators`         | Starts database and pubsub emulators for use with `start:emulate`                                                       |
+| `emulators:hosting` | Starts database and hosting emulators (used in verify workflow by Cypress)                                              |
+| `test`              | Runs unit tests with Jest. See [testing](#testing)                                                                      |
+| `test:watch`        | Runs `test` in watch mode to re-run tests when changed                                                                  |
+| `test:ui:run`       | Runs UI tests with Cypress. See [testing](#testing)                                                                     |
+| `test:ui`           | Opens UI tests runner (Cypress Dashboard). See [testing](#testing)                                                      |
+| `test:ui:emulate`   | Same as `test:ui` but with tests pointed at emulators                                                                   |
+| `lint`              | [Lints](http://stackoverflow.com/questions/8503559/what-is-linting) the project for potential errors                    |
+| `lint:fix`          | Lints the project and [fixes all correctable errors](http://eslint.org/docs/user-guide/command-line-interface.html#fix) |
 
 [Husky](https://github.com/typicode/husky) is used to enable `prepush` hook capability. The `prepush` script currently runs `eslint`, which will keep you from pushing if there is any lint within your code. If you would like to disable this, remove the `prepush` script from the `package.json`.
 
@@ -95,7 +93,12 @@ The application structure presented in this boilerplate is **fractal**, where fu
 │   │  ├── deploy.yml            # Deploy workflow (deploys when pushing to specific branches)
 │   │  └── verify.yml            # Paths for application routes
 │   └── PULL_REQUEST_TEMPLATE.md # Main HTML page container for app
+├── cypress                      # UI Integration Tests
+├── functions                    # Cloud Functions
+│   ├── src                      # Cloud Functions Source code (each folder represents a function)
+│   └── index.js                 # Mount point of Cloud Functions (loads functions by name)
 ├── public                       # All build-related configuration
+│   ├── firebase-messaging-sw.js # Service worker for Firebase Cloud Messaging
 │   └── index.html               # Main HTML page container for app
 ├── src                          # Application source code
 │   ├── components               # Global Reusable Presentational Components
@@ -112,9 +115,8 @@ The application structure presented in this boilerplate is **fractal**, where fu
 │   │       ├── components       # Presentational React Components
 │   │       └── routes/**        # Fractal sub-routes (** optional)
 │   └── utils                    # General Utilities (used throughout application)
-│   │   ├── components.js        # Utilities for building/implementing react components
-│   │   ├── form.js              # For forms
-│   │   └── router.js            # Utilities for routing such as those that redirect back to home if not logged in
+│       ├── form.js              # Utilities for forms (validation)
+│       └── router.js            # Utilities for routing such as those that redirect back to home if not logged in
 ├── .env.local                   # Environment settings for when running locally
 ├── .eslintignore                # ESLint ignore file
 ├── .eslintrc.js                 # ESLint configuration
@@ -181,6 +183,7 @@ To add a unit test, create a `.spec.js` or `.test.js` file anywhere inside of `s
 Cypress is used to write and run UI tests which live in the `cypress` folder. [`cypress-firebase`](https://github.com/prescottprue/cypress-firebase) is used to generate a custom auth token for the test user and to communicate with Firebase databases with admin privileges.
 
 #### Tests Setup
+
 1. Visit the [Firebase Console](https://console.firebase.google.com/)
 1. Select your project
 1. Navigate to Project Settings (gear icon button at the top left of the page).
@@ -189,6 +192,7 @@ Cypress is used to write and run UI tests which live in the `cypress` folder. [`
 1. Save the service account file to the root of the repo under `serviceAccount.json`
 
 #### Running Tests
+
 The following npm scripts can be used to run tests:
 
 - Run using Cypress run: `yarn test:ui:run`
@@ -213,7 +217,8 @@ Before starting make sure to install Firebase Command Line Tool: `npm i -g fireb
 
 #### CI Deploy (recommended)
 
-**Note**: Config for this is located within
+**Note**: Config for this is located within `.github/workflows`
+
 `firebase-ci` has been added to simplify the CI deployment process. All that is required is providing authentication with Firebase:
 
 1. Login: `firebase login:ci` to generate an authentication token (will be used to give CI rights to deploy on your behalf)
@@ -233,10 +238,10 @@ For more options on CI settings checkout the [firebase-ci docs](https://github.c
    - Configure as a single-page app (rewrite all urls to /index.html)? -> `Yes`
    - What Firebase project do you want to associate as default? -> **your Firebase project name**
 1. Build Project: `yarn build`
-1. Confirm Firebase config by running locally: `firebase serve`
+1. Confirm Firebase config by running locally: `yarn emulators:hosting`
 1. Deploy to Firebase (everything including Hosting and Functions): `firebase deploy`
 
-**NOTE:** You can use `firebase serve` to test how your application will work when deployed to Firebase, but make sure you run `yarn build` first.
+**NOTE:** You can use `yarn emulators:hosting` to test how your application will work when deployed to Firebase, but make sure you run `yarn build` first.
 
 ## FAQ
 
@@ -244,13 +249,11 @@ For more options on CI settings checkout the [firebase-ci docs](https://github.c
 
 [Cloud Functions runtime runs on `10`](https://cloud.google.com/functions/docs/writing/#the_cloud_functions_runtime), which is why that is what is used for the CI build version.
 
-[build-status-image]: https://img.shields.io/github/workflow/status/prescottprue/firething/Verify%20App?style=flat-square
+[build-status-image]: https://img.shields.io/github/workflow/status/prescottprue/firething/Verify?style=flat-square
 [build-status-url]: https://github.com/prescottprue/firething/actions
-[climate-image]: https://img.shields.io/codeclimate/github/prescottprue/firething.svg?style=flat-square
-[climate-url]: https://codeclimate.com/github/prescottprue/firething
-[coverage-image]: https://img.shields.io/codeclimate/coverage/github/prescottprue/firething.svg?style=flat-square
-[coverage-url]: https://codeclimate.com/github/prescottprue/firething
-[license-image]: https://img.shields.io/npm/l/firething.svg?style=flat-square
+[coverage-image]: https://img.shields.io/codecov/c/github/prescottprue/firething.svg?style=flat-square
+[coverage-url]: https://codecov.io/gh/prescottprue/firething
+[license-image]: https://img.shields.io/github/license/prescottprue/firething?style=flat-square
 [license-url]: https://github.com/prescottprue/firething/blob/master/LICENSE
 [code-style-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
 [code-style-url]: http://standardjs.com/

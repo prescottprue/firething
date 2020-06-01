@@ -3,38 +3,5 @@
     "default": "firething-347ed",
     "master": "firething-347ed",
     "prod": "firething-347ed"
-  },
-  "ci": {
-    "copyVersion": true,
-    "createConfig": {
-      "master": {
-        "env": "staging",
-        "firebase": {
-          "apiKey": "AIzaSyDE5pl5l614H9i0OD-4JRFzuErlBBON_AI",
-          "authDomain": "firething-347ed.firebaseapp.com",
-          "databaseURL": "https://firething-347ed.firebaseio.com",
-          "projectId": "firething-347ed",
-          "storageBucket": "firething-347ed.appspot.com",
-          "messagingSenderId": "490492091019",
-          "appId": "1:490492091019:web:216845bd0cba1c808a928e"
-        },
-        "sentryDsn": "",
-        "publicVapidKey": "BG5uwFfvatV1RFUKEnbuGs9by5qY6hmDd8GBE6Za9kqeGGRbvnyUuEgze-pX6IUWNlfMioY0JGY4G8ANWucgpYc"
-      },
-      "prod": {
-        "env": "production",
-        "firebase": {
-          "apiKey": "AIzaSyDE5pl5l614H9i0OD-4JRFzuErlBBON_AI",
-          "authDomain": "firething-347ed.firebaseapp.com",
-          "databaseURL": "https://firething-347ed.firebaseio.com",
-          "projectId": "firething-347ed",
-          "storageBucket": "firething-347ed.appspot.com",
-          "messagingSenderId": "490492091019",
-          "appId": "1:490492091019:web:216845bd0cba1c808a928e"
-        },
-        "sentryDsn": "",
-        "publicVapidKey": "BG5uwFfvatV1RFUKEnbuGs9by5qY6hmDd8GBE6Za9kqeGGRbvnyUuEgze-pX6IUWNlfMioY0JGY4G8ANWucgpYc"
-      }
-    }
   }
 }

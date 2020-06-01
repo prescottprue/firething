@@ -17,7 +17,8 @@ function SetupAnalytics() {
   // By passing `user.uid` to the second argument of `useEffect`,
   // we only set user id when it exists
   useEffect(() => {
-    if (user.uid) {
+    // NOTE: optional chaining causes "Cannot read property 'references' of undefined" error in eslint
+    if (user && user.uid) {
       analytics.setUserId(user.uid)
       analytics.setUserProperties({
         name: user.displayName,
