@@ -11,7 +11,7 @@
     "lint": "eslint -c .eslintrc.js .",
     "lint:fix": "yarn lint --fix",
     "clean": "rimraf dist etc",
-    "build": "yarn clean && babel src -d --out-dir dist",
+    "build": "yarn clean && tsc",
     "watch": "yarn build --watch",
     "shell": "yarn build && firebase functions:shell",
     "start": "yarn shell",
@@ -29,7 +29,7 @@
     "source-map-support": "^0.5.19"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.11",
+    "@types/jest": "^26.0.8",
     "@types/mkdirp": "^1.0.1",
     "@types/node": "^14.0.13",
     "@types/node-fetch": "^2.5.7",
