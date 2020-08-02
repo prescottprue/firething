@@ -22,7 +22,8 @@
       "appId": "1:490492091019:web:216845bd0cba1c808a928e",
       "measurementId": "",
       "firebasePublicVapidKey": "BG5uwFfvatV1RFUKEnbuGs9by5qY6hmDd8GBE6Za9kqeGGRbvnyUuEgze-pX6IUWNlfMioY0JGY4G8ANWucgpYc",
-      "ciProvider": "githubActions"
+      "ciProvider": "githubActions",
+      "typescriptCloudFunctions": true
     }
   }
 }

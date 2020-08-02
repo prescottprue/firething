@@ -1,14 +1,12 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { FirebaseAppProvider, SuspenseWithPerf } from 'reactfire'
 import { BrowserRouter as Router } from 'react-router-dom'
 import NotificationsProvider from 'modules/notification/NotificationsProvider'
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import ThemeProvider from 'modules/theme/ThemeProvider'
 import SetupMessaging from 'components/SetupMessaging'
 import SetupFirestore from 'components/SetupFirestore'
-import ThemeSettings from '../../theme'
-
-const theme = createMuiTheme(ThemeSettings)
+import SetupAnalytics from 'components/SetupAnalytics'
+import createRoutes from './routes'
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_apiKey,
@@ -26,9 +24,10 @@ if (process.env.REACT_APP_FIREBASE_DATABASE_EMULATOR_HOST) {
   console.debug(`RTDB emulator enabled: ${firebaseConfig.databaseURL}`) // eslint-disable-line no-console
 }
 
-function App({ routes }) {
+function App() {
+  const routes = createRoutes()
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider>
       <FirebaseAppProvider firebaseConfig={firebaseConfig} initPerformance>
         <NotificationsProvider>
           <>
@@ -39,15 +38,14 @@ function App({ routes }) {
             <SuspenseWithPerf traceId="setup-messaging">
               <SetupMessaging />
             </SuspenseWithPerf>
+            <SuspenseWithPerf traceId="setup-analytics">
+              <SetupAnalytics />
+            </SuspenseWithPerf>
           </>
         </NotificationsProvider>
       </FirebaseAppProvider>
-    </MuiThemeProvider>
+    </ThemeProvider>
   )
-}
-
-App.propTypes = {
-  routes: PropTypes.object.isRequired
 }
 
 export default App

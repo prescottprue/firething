@@ -1,12 +1,10 @@
 import { useEffect } from 'react'
 import { useAnalytics, useUser } from 'reactfire'
-import { useLocation } from 'react-router-dom'
 import { setErrorUser } from 'utils/errorHandler'
 import { version } from '../../../package.json'
 
 function SetupAnalytics() {
   const analytics = useAnalytics()
-  const location = useLocation()
   const user = useUser()
 
   // Disable analytics data collection when Cypress is being run
@@ -18,7 +16,7 @@ function SetupAnalytics() {
   // we only set user id when it exists
   useEffect(() => {
     // NOTE: optional chaining causes "Cannot read property 'references' of undefined" error in eslint
-    if (user && user.uid) {
+    if (user?.uid) {
       analytics.setUserId(user.uid)
       analytics.setUserProperties({
         name: user.displayName,
@@ -35,9 +33,10 @@ function SetupAnalytics() {
   useEffect(() => {
     // Trigger event in Firebase analytics
     if (!window.Cypress && process.env.REACT_APP_FIREBASE_MEASUREMENT_ID) {
-      analytics.logEvent('page-view', { path_name: location.pathname })
+      // NOTE: window.location is used in place of useLocation since this it outside of router context
+      analytics.logEvent('page-view', { path_name: window.location.pathname })
     }
-  }, [location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [window.location.pathname]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return null
 }

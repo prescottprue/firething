@@ -36,9 +36,6 @@ export default function createRoutes() {
             )
           }
           <Route component={NotFoundRoute.component} />
-          <SuspenseWithPerf traceId="analytics-setup">
-            <SetupAnalytics />
-          </SuspenseWithPerf>
         </Switch>
       </SuspenseWithPerf>
     </CoreLayout>

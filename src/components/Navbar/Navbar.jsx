@@ -4,7 +4,7 @@ import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
 import { useUser } from 'reactfire'
 import { LIST_PATH, LOGIN_PATH } from 'constants/paths'
-import AccountMenu from './AccountMenu'
+import AccountMenu from './NavbarAccountMenu'
 import NavbarWithoutAuth from './NavbarWithoutAuth'
 import styles from './Navbar.styles'
 
@@ -13,7 +13,7 @@ const useStyles = makeStyles(styles)
 function Navbar() {
   const classes = useStyles()
   const auth = useUser()
-  const authExists = !!auth && !!auth.uid
+  const authExists = !!auth?.uid
 
   return (
     <NavbarWithoutAuth brandPath={authExists ? LIST_PATH : '/'}>

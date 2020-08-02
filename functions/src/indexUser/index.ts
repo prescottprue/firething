@@ -1,18 +1,20 @@
 import * as admin from 'firebase-admin'
 import * as functions from 'firebase-functions'
-import { to } from '../utils/async'
 
 /**
  * Index user's by placing their displayName into the users_public collection
- * @param {functions.Change} change - Database event from function being
- * @param {admin.firestore.DataSnapshot} change.before - Snapshot of data before change
- * @param {admin.firestore.DataSnapshot} change.after - Snapshot of data after change
- * @param {functions.EventContext} context - Function context which includes
+ * @param change - Database event from function being
+ * @param change.before - Snapshot of data before change
+ * @param change.after - Snapshot of data after change
+ * @param context - Function context which includes
  * data about the event. More info in docs:
  * https://firebase.google.com/docs/reference/functions/functions.EventContext
- * @returns {Promise} Resolves with user's profile
+ * @returns Resolves with user's profile
  */
-async function indexUser(change, context) {
+async function indexUser(
+  change: functions.Change<admin.firestore.DocumentSnapshot>,
+  context: functions.EventContext
+): Promise<null> {
   const { userId } = context.params || {}
   const publicProfileRef = admin
     .firestore()
@@ -24,50 +26,48 @@ async function indexUser(change, context) {
     console.log(
       `Profile being removed for user with id: ${userId}, removing from index...`
     )
-    const [nameRemoveErr] = await to(publicProfileRef.delete())
-    // Handle errors removing displayName index
-    if (nameRemoveErr) {
+    try {
+      await publicProfileRef.delete()
+      console.log(`Successfully removed user with id: ${userId} from index.`)
+      return null
+    } catch (err) {
       console.error(
-        'Error running delete promises:',
-        nameRemoveErr.message || nameRemoveErr
+        `Error removing public profile of user with id: ${userId}`,
+        err
       )
-      throw nameRemoveErr
+      throw err
     }
-    console.log(`Successfully removed user with id: ${userId} from index.`)
-    return null
   }
 
   const previousData = change.before.data()
-  const newData = change.after.data()
+  const newData = change.after.data() || {}
 
   // Check to see if displayName has changed
-  if (previousData && previousData.displayName === newData.displayName) {
+  if (previousData?.displayName === newData.displayName) {
     console.log(
       `displayName parameter did not change for user with id: ${userId}, no need to update index. Exiting...`
     )
     return null
   }
 
-  // Update displayName within index
-  const [nameUpdateErr] = await to(
-    publicProfileRef.set(
+  // Update displayName within public profile
+  try {
+    await publicProfileRef.set(
       {
         displayName: newData.displayName
       },
       { merge: true }
     )
-  )
-
-  // Handle errors updating displayName index
-  if (nameUpdateErr) {
+  } catch (err) {
+    // Handle errors updating displayName index
     console.error(
       `Error running updating displayName index for profile with userId: ${userId}`,
-      nameUpdateErr.message || nameUpdateErr
+      err
     )
-    throw nameUpdateErr
+    throw err
   }
 
-  return newData
+  return null
 }
 
 /**
