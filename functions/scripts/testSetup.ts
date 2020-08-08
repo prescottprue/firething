@@ -2,16 +2,12 @@
 import functionsTestSetup from 'firebase-functions-test'
 import * as admin from 'firebase-admin'
 const projectId = 'unit-test-project'
-const { FIREBASE_DATABASE_EMULATOR_HOST, FIRESTORE_EMULATOR_HOST } = process.env
+const {
+  FIREBASE_DATABASE_EMULATOR_HOST,
+  FIRESTORE_EMULATOR_HOST = 'localhost:8080'
+} = process.env
 
-// Setup firebase-functions-tests to online mode (will communicate with emulators)
-global.functionsTest = functionsTestSetup({
-  databaseURL: `https://${projectId}.firebaseio.com`, // Can not be emulator
-  storageBucket: `${projectId}.appspot.com`,
-  projectId
-})
-
-global.projectId = projectId
+;(global as any).projectId = projectId
 
 // Initialize admin SDK with emulator settings for RTDB (needed to
 // prevent error from initializeApp not being called since it is in index.js)

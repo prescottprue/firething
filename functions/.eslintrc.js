@@ -22,6 +22,12 @@ module.exports = {
       }
     },
     {
+      files: ['scripts/testSetup.ts'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 0
+      }
+    },
+    {
       files: ['src/**/*.spec.ts'],
       env: {
         jest: true

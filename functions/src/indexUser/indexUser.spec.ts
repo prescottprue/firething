@@ -1,6 +1,9 @@
 import * as firebaseTesting from '@firebase/testing'
+import functionsTestLib from 'firebase-functions-test'
 import indexUserOriginal from './index'
 
+const functionsTest = functionsTestLib()
+const projectId = process.env.GCLOUD_PROJECT || 'unit-test-project'
 const USER_UID = '123ABC'
 const USERS_COLLECTION = 'users'
 const USER_PATH = `${USERS_COLLECTION}/${USER_UID}`
@@ -33,7 +36,7 @@ describe('indexUser Firestore Cloud Function (onWrite)', () => {
     const userData = { displayName: 'data' }
     // Build a Firstore create event object on user's path
     const beforeSnap = functionsTest.firestore.makeDocumentSnapshot(
-      null,
+      null as any,
       USER_PATH
     )
     const afterSnap = functionsTest.firestore.makeDocumentSnapshot(
@@ -60,7 +63,7 @@ describe('indexUser Firestore Cloud Function (onWrite)', () => {
       USER_PATH
     )
     const afterSnap = functionsTest.firestore.makeDocumentSnapshot(
-      null,
+      null as any,
       USER_PATH
     )
     const changeEvent = { before: beforeSnap, after: afterSnap }
@@ -82,7 +85,7 @@ describe('indexUser Firestore Cloud Function (onWrite)', () => {
       USER_PATH
     )
     const afterSnap = functionsTest.firestore.makeDocumentSnapshot(
-      null,
+      null as any,
       USER_PATH
     )
     const changeEvent = { before: beforeSnap, after: afterSnap }
