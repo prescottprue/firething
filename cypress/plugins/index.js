@@ -27,6 +27,6 @@ module.exports = (on, incomingConfig) => {
   if (process.env.CYPRESS_BASE_URL) {
     mergedConfig.baseUrl = process.env.CYPRESS_BASE_URL
   }
-  
+
   return mergedConfig
 }

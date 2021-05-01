@@ -13,7 +13,6 @@ import './index.css'
 window.version = version
 window.config = config
 
-
 // Initialize Error Handling
 // ------------------------------------
 initErrorHandling()
