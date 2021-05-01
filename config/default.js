@@ -21,8 +21,7 @@ const config = {
   },
   environment: process.env.NODE_CONFIG_ENV || 'local',
   sentry: {
-    dsn:
-      '',
+    dsn: '',
     enabled: !process.env.LOCAL_DEV
   }
 }
