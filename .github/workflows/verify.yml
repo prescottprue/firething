@@ -48,16 +48,6 @@ jobs:
 
       - name: Set environment
         run: |
-          set -o pipefail
-
-          # Throw a clear error if FIREBASE_TOKEN secret is not set
-          if [ -z "$FIREBASE_TOKEN" ];
-            then
-              missingTokenErrMsg="\"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
-              echo "::error ::$missingTokenErrMsg"
-              exit 1
-          fi
-
           # Get branch name from github ref (i.e. refs/heads/master -> master)
           gitBranch=${GITHUB_REF##*/}
 
@@ -73,9 +63,20 @@ jobs:
           echo "ENV=$branch" >> $GITHUB_ENV
 
       - name: Generate Firebase SDK config for ${{ env.GCLOUD_PROJECT }}
-        run: bin/generate-firebase-sdk-config.js --file ./config/default.json
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+        run: |
+          set -o pipefail
+
+          # Throw a clear error if FIREBASE_TOKEN secret is not set
+          if [ -z "$FIREBASE_TOKEN" ];
+            then
+              missingTokenErrMsg="\"FIREBASE_TOKEN\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
+              echo "::error ::$missingTokenErrMsg"
+              exit 1
+          fi
+
+          bin/generate-firebase-sdk-config.js --file ./config/default.json
 
       - name: Verify App
         run: |
