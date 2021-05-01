@@ -9,6 +9,7 @@ const config = {
   }),
   // Only configuration for Cypress goes here
   cypress: {
+    baseUrl: 'http://localhost:3000',
     env: {
       firebase: defer(function firebaseSdk() {
         return this.firebase
