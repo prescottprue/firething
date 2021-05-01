@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['standard', 'standard-react', 'prettier', 'prettier/react'],
+  extends: ['standard', 'standard-react', 'prettier'],
   root: true,
   parser: 'babel-eslint',
   plugins: ['import', 'react', 'react-hooks', 'prettier'],
@@ -15,7 +15,7 @@ module.exports = {
   },
   rules: {
     semi: [2, 'never'],
-    'no-console': 'error',
+    'no-console': 0,
     'react/forbid-prop-types': 0,
     'react/require-default-props': 0,
     'react/jsx-filename-extension': 0,
@@ -55,6 +55,7 @@ module.exports = {
     },
     {
       files: ['./src/**/*.test.jsx', './src/**/*.spec.jsx'],
+      extends: ['plugin:react/recommended'],
       env: {
         jest: true
       }
