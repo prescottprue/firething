@@ -12,7 +12,6 @@ process.env.FIREBASE_CONFIG = JSON.stringify({
   storageBucket: `${projectId}.appspot.com`,
   projectId
 })
-
 ;(global as any).projectId = projectId
 
 // Initialize admin SDK with emulator settings for RTDB (needed to
