@@ -102,6 +102,14 @@ jobs:
           echo "$(echo $SERVICE_ACCOUNT | jq .)" > $HOME/serviceAccount.json
           export GOOGLE_APPLICATION_CREDENTIALS="$HOME/serviceAccount.json"
 
+          echo "Setting emulator settings to environment..."
+          databaseEmulatorHost=localhost:$(cat firebase.json | jq .emulators.database.port)
+          emulatorHost=localhost:$(cat firebase.json | jq .emulators.firestore.port)
+          
+          # Set variables to environment to be used in later steps
+          echo "FIREBASE_DATABASE_EMULATOR_HOST=$databaseEmulatorHost" >> $GITHUB_ENV
+          echo "FIRESTORE_EMULATOR_HOST=$emulatorHost" >> $GITHUB_ENV
+
           # Run tests and generate coverage
           yarn functions:test:cov -- --project $GCLOUD_PROJECT # Run unit tests with coverage
 

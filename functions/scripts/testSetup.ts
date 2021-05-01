@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import functionsTestSetup from 'firebase-functions-test'
 import * as admin from 'firebase-admin'
 const projectId = 'unit-test-project'
 const {
