@@ -13,10 +13,10 @@ const config = {
   cypress: {
     env: {
       firebase: defer(function firebaseSdk() {
-        return this.firebase;
+        return this.firebase
       }),
       TEST_UID: 'aMAy91SPbuXTMvmiYoSNd3V8NcY2',
-      TZ: 'America/Los_Angeles',
+      TZ: 'America/Los_Angeles'
     },
     experimentalFetchPolyfill: true,
     retries: 3

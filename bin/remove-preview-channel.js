@@ -25,7 +25,7 @@ async function getBranchPreviewChannelName() {
 
 async function removePreviewChannel(channelName) {
   console.log(
-    `Deleteing preview-channel "${channelName}" for project "${project}"...`,
+    `Deleteing preview-channel "${channelName}" for project "${project}"...`
   )
   await firebase.hosting.channel.delete(channelName, {
     project,

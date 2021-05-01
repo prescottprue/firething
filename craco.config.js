@@ -8,12 +8,12 @@ module.exports = () => {
 
   fs.writeFileSync(
     path.resolve(__dirname, 'src/client-config.json'),
-    JSON.stringify(config, null, 2),
+    JSON.stringify(config, null, 2)
   )
 
   return {
     eslint: {
-      enable: false,
+      enable: false
     },
     webpack: {
       alias: {

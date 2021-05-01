@@ -99,6 +99,15 @@ jobs:
         run: |
           yarn build
 
+      - name: Deploy to Firebase hosting preview channel
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        id: preview-deploy
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.SERVICE_ACCOUNT }}"
+          expires: 7d
+          projectId: ${{ env.GCLOUD_PROJECT }}
+
       - name: Archive Build Artifact
         uses: actions/upload-artifact@v2
         with:
