@@ -1,4 +1,4 @@
-import * as firebaseTesting from '@firebase/testing'
+import * as firebaseTesting from '@firebase/rules-unit-testing'
 import functionsTestLib from 'firebase-functions-test'
 import indexUserOriginal from './index'
 
