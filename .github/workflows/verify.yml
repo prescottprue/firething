@@ -86,6 +86,14 @@ jobs:
         env:
           SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }}
         run: |
+          # Throw a clear error if SERVICE_ACCOUNT secret is not set
+          if [ -z "$SERVICE_ACCOUNT" ];
+            then
+              missingTokenErrMsg="\"SERVICE_ACCOUNT\" github secret is required to load project configuration. Visit https://github.com/${{ github.repository }}/settings/secrets to set."
+              echo "::error ::$missingTokenErrMsg"
+              exit 1
+          fi
+
           # Generate Service Account file required to prevent credential error in unit tests (jq used to format)
           projectId=$(echo $SERVICE_ACCOUNT | jq .project_id)
           serviceAccountId=$(echo $SERVICE_ACCOUNT | jq .private_key_id)
