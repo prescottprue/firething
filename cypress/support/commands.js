@@ -1,4 +1,4 @@
-import '@testing-library/cypress/add-commands';
+import '@testing-library/cypress/add-commands'
 import firebase from 'firebase/app'
 import 'firebase/database'
 import 'firebase/auth'
