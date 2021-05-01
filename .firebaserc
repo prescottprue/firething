@@ -1,7 +1,7 @@
 {
   "projects": {
     "default": "firething-347ed",
-    "master": "firething-347ed",
+    "main": "firething-347ed",
     "prod": "firething-347ed"
   }
 }

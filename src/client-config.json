@@ -1,0 +1,19 @@
+{
+  "cloudFunctionsUrl": "https://us-central1-firething-347ed.cloudfunctions.net",
+  "environment": "local",
+  "sentry": {
+    "dsn": "https://646bc3658d834efc847a8c4047f8b25d@o39081.ingest.sentry.io/5242582",
+    "enabled": true
+  },
+  "firebase": {
+    "projectId": "firething-347ed",
+    "appId": "1:490492091019:web:216845bd0cba1c808a928e",
+    "databaseURL": "https://firething-347ed.firebaseio.com",
+    "storageBucket": "firething-347ed.appspot.com",
+    "locationId": "us-central",
+    "apiKey": "AIzaSyDE5pl5l614H9i0OD-4JRFzuErlBBON_AI",
+    "authDomain": "firething-347ed.firebaseapp.com",
+    "messagingSenderId": "490492091019",
+    "measurementId": "G-G1EDW42YML"
+  }
+}
