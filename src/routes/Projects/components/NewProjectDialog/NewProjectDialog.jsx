@@ -29,7 +29,6 @@ function NewProjectDialog({ onSubmit, open, onRequestClose }) {
             error={!!errors.name}
             helperText={errors.name && 'Name is required'}
             label="Project Name"
-            aria-label="Project Name"
             autoFocus
             inputProps={{
               tabIndex: '1',
