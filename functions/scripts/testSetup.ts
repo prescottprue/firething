@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import functionsTestSetup from 'firebase-functions-test'
 import * as admin from 'firebase-admin'
 const projectId = 'unit-test-project'
 const {
@@ -7,6 +6,12 @@ const {
   FIRESTORE_EMULATOR_HOST = 'localhost:8080'
 } = process.env
 
+// Prevents warning from firebase-admin saying that project is being inferred from GCLOUD_PROJECT
+process.env.FIREBASE_CONFIG = JSON.stringify({
+  databaseURL: `https://${projectId}.firebaseio.com`, // Can not be emulator
+  storageBucket: `${projectId}.appspot.com`,
+  projectId
+})
 ;(global as any).projectId = projectId
 
 // Initialize admin SDK with emulator settings for RTDB (needed to

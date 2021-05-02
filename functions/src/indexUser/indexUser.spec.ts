@@ -1,9 +1,14 @@
-import * as firebaseTesting from '@firebase/testing'
+import * as firebaseTesting from '@firebase/rules-unit-testing'
 import functionsTestLib from 'firebase-functions-test'
 import indexUserOriginal from './index'
 
-const functionsTest = functionsTestLib()
 const projectId = process.env.GCLOUD_PROJECT || 'unit-test-project'
+// Setup firebase-functions-tests to online mode (communicates with emulators)
+const functionsTest = functionsTestLib({
+  databaseURL: `https://${projectId}.firebaseio.com`, // Can not be emulator
+  storageBucket: `${projectId}.appspot.com`,
+  projectId
+})
 const USER_UID = '123ABC'
 const USERS_COLLECTION = 'users'
 const USER_PATH = `${USERS_COLLECTION}/${USER_UID}`
@@ -63,7 +68,7 @@ describe('indexUser Firestore Cloud Function (onWrite)', () => {
       USER_PATH
     )
     const afterSnap = functionsTest.firestore.makeDocumentSnapshot(
-      null as any,
+      userData,
       USER_PATH
     )
     const changeEvent = { before: beforeSnap, after: afterSnap }
