@@ -57,7 +57,7 @@
     "@sentry/cli": "^1.63.1",
     "@testing-library/cypress": "^7.0.3",
     
-    "@typescript-eslint/eslint-plugin": "^4.15.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
     "@typescript-eslint/parser": "^4.15.0",
     "babel-eslint": "^10.1.0",
     "config": "^3.3.6",
