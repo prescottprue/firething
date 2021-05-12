@@ -138,7 +138,7 @@ jobs:
       - name: Create Github Release
         if: github.ref == 'refs/heads/prod' && steps.check.outputs.changed == 'true'
         id: create_release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v1.1.4
         env:
           GITHUB_TOKEN: ${{ github.token }}
         with:
