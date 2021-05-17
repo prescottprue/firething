@@ -6306,10 +6306,10 @@ cyclist@^1.0.1:
   resolved "https://registry.yarnpkg.com/cyclist/-/cyclist-1.0.1.tgz#596e9698fd0c80e12038c2b82d6eb1b35b6224d9"
   integrity sha1-WW6WmP0MgOEgOMK4LW6xs1tiJNk=
 
-cypress-firebase@^1.8.0:
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/cypress-firebase/-/cypress-firebase-1.8.0.tgz#e6e2059583f564e6bfc790c26d4ebb34903050d3"
-  integrity sha512-SPnuNbMR30RcD054H/HyBl6s9pU6nYd8l7IL822mHhiqS/vl7P0RTGFbkvCDUf3Y6soDSo4M8wtiZ1qwudgPpQ==
+cypress-firebase@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/cypress-firebase/-/cypress-firebase-1.9.1.tgz#7e2d1902e4261dfc18cd3fc45295249fd69e7229"
+  integrity sha512-G8w1WBmIpNrbt42kDyw8hhE+wa9eIp0jT98eBw2ZBasZ1RBCFozbBZuoBaJ2Rtcf+gH9qJBGcB5fOCCJXmL7kw==
 
 cypress@^7.2.0:
   version "7.2.0"
