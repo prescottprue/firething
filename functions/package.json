@@ -23,9 +23,9 @@
     "test:watch": "yarn test --watch"
   },
   "dependencies": {
-    "firebase-admin": "^9.6.0",
+    "firebase-admin": "^9.8.0",
     "firebase-functions": "^3.13.2",
-    "glob": "^7.1.6",
+    "glob": "^7.1.7",
     "tslib": "^2.2.0"
   },
   "devDependencies": {
