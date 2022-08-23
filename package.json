@@ -82,7 +82,7 @@
     "eslint-plugin-standard": "^5.0.0",
     "firebase-admin": "^9.8.0",
     "firebase-ci": "^0.15.0",
-    "firebase-tools": "^9.10.2",
+    "firebase-tools": "^11.8.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
     "minimist": "1.2.5",
